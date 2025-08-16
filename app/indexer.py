@@ -9,7 +9,7 @@ from pymilvus import MilvusClient, DataType, Function, FunctionType
 from langchain_core.documents import Document
 
 def create_vectorstore( URI: str ,collection_name: str):
-  """Create a vector store using Milvus and HuggingFace embeddings."""
+  """Create a vector store using Milvus and OpenAI embeddings."""
   embeddings = embedding
   vector_store = Milvus(
       auto_id=False,

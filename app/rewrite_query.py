@@ -16,12 +16,12 @@ def rewrite_query_for_vectorsearch(query: str, history: list[dict]):
 
 
     system_msg = SystemMessage(
-        content = 'Bạn là 1 chuyên gia viết lại truy vấn người dùng dựa vào lịch sử chat. Truy vấn này dùng để tìm kiếm các tài liệu liên quan đến PTIT.'
+        content = 'Bạn là 1 chuyên gia viết lại truy vấn người dùng sao cho câu truy vấn có đủ ý.'
     )
     human_msg = HumanMessage(
         content = f"""
         **Đây là truy vấn gần nhất từ người dùng:**{query}.
-        Dựa vào lịch sử chat hãy bổ viết lại truy vấn người dùng cho đủ ý để thực hiện vector search (Lưu ý: Không được bịa thêm).
+        Nếu có lịch sử chat thì dựa vào lịch sử chat hãy bổ viết lại truy vấn người dùng cho đủ ý để thực hiện vector search (Lưu ý: Không được bịa thêm).
         Với những câu truy vấn tương tự như sau:
         - Xin chào
         - Chào bạn
@@ -36,10 +36,11 @@ def rewrite_query_for_vectorsearch(query: str, history: list[dict]):
 
     # Khởi tạo model có stream
     llm = ChatOpenAI(
-        model="gpt-5-nano-2025-08-07",  #gpt-5-nano-2025-08-07
-        temperature=1,
+        model="gpt-4.1-nano-2025-04-14",  #gpt-5-nano-2025-08-07
+        temperature=0.7,
         openai_api_key=OPENAI_API_KEY
     )
 
     res = llm.invoke(messages)
     return res.content
+

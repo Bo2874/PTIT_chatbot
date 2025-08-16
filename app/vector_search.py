@@ -56,12 +56,8 @@ def get_texts_by_ids(ids: list[str]) -> list[dict]:
     
 # if __name__ == "__main__":
 #     # Example usage
-#     from indexer import create_vectorstore
-
-#     URI = "http://localhost:19530"
-#     collection_name="ptit_vectors"
-
-#     vector_store = create_vectorstore(URI, collection_name)
+#     from milvus_connection import vector_store
+    
 #     retriever = VectorSearchAgent(vector_store)
     
 #     query = "lịch sử học viện công nghệ bưu chính viễn thông"

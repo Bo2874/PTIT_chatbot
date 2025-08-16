@@ -100,7 +100,7 @@ if prompt := st.chat_input("Nhập câu hỏi của bạn về PTIT..."):
                 # Báo lỗi nếu request không thành công (vd: lỗi 4xx, 5xx)
                 response.raise_for_status() 
                 # Dùng iter_content để xử lý streaming an toàn hơn
-                for chunk in response.iter_content(chunk_size=1024, decode_unicode=True):
+                for chunk in response.iter_content(chunk_size=None, decode_unicode=True):
                     if chunk:
                         full_response += chunk
                         # Thêm con trỏ nhấp nháy để tạo cảm giác "đang gõ"
