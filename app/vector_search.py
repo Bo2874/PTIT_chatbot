@@ -2,6 +2,7 @@ from langchain_core.documents import Document
 from conn_postgres import pg_conn, pg_cursor
 
 
+
 hybrid_search_params = [
     {
         "anns_field": "vector",    # Trường vector dày (dense)
@@ -53,6 +54,8 @@ def get_texts_by_ids(ids: list[str]) -> list[dict]:
     results = [{"id": row[0], "url": row[1], "text": row[2]} for row in rows]
 
     return results   
+
+
     
 # if __name__ == "__main__":
 #     # Example usage

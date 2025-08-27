@@ -45,6 +45,7 @@ This project is a student consulting chatbot designed for the Posts and Telecomm
 **Core AI / NLP:**  
 - [LangChain] – framework for Retrieval-Augmented Generation (RAG)  
 - Embedding Models – used for semantic search in Milvus (use model of OpenAI)
+- Rerank - use model rerank of HuggingFace
 - LLM - use API of OpenAI
 
 ## Installation
