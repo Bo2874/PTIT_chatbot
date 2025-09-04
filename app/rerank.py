@@ -1,25 +1,22 @@
-from langchain_community.cross_encoders import HuggingFaceCrossEncoder
+from sentence_transformers import CrossEncoder
 from langchain_core.documents import Document
 
 class Reranker:
-    def __init__(self, model_name: str = "BAAI/bge-reranker-v2-m3"):
-        self.reranker = HuggingFaceCrossEncoder(model_name=model_name)
+    def __init__(self, model_name="BAAI/bge-reranker-v2-m3", use_gpu=True):
+        device = "cuda" if use_gpu else "cpu"
+        self.model = CrossEncoder(model_name, device=device)
 
-    def rerank(self, query: str, docs: list[Document], top_k: int = 5) -> list[Document]:
-        if not docs:
-            return []
-
-        # Tạo batch (query, doc_text)
+    def rerank(self, query: str, docs: list[Document], top_k: int = 5, batch_size: int = 8) -> list[Document]:
         pairs = [(query, doc.page_content) for doc in docs]
 
-        # Tính điểm similarity (batch predict)
-        scores = self.reranker.score(pairs)
+        # Batch prediction trên GPU nếu device="cuda"
+        scores = self.model.predict(pairs, batch_size=batch_size)
 
         # Gắn score vào metadata
-        for doc, score in zip(docs, scores):
-            doc.metadata["score"] = float(score)
+        for i, doc in enumerate(docs):
+            doc.metadata["score"] = float(scores[i])
 
-        # Sắp xếp theo score giảm dần
-        docs_sorted = sorted(docs, key=lambda d: d.metadata["score"], reverse=True)
+        reranked = sorted(docs, key=lambda x: x.metadata["score"], reverse=True)
+        return reranked[:top_k]
+    
 
-        return docs_sorted[:top_k]

@@ -43,17 +43,17 @@ async def streaming_chatbot(query: str, history: list[dict]):
         try:
             start_time1 = time.time()
             retriever = VectorSearchAgent(vector_store)
-            ids = retriever.retrieve(new_query, 7)
+            ids = retriever.retrieve(new_query, 8)
             infors = get_texts_by_ids(ids)
             end_time1 = time.time()
             logger.info(f"Thời gian truy xuất vector: {(end_time1 - start_time1):.2f} giây")
             
-            # Sử dụng reranker để sắp xếp lại kết quả
-            start_time_rerank = time.time()
-            reranker = Reranker(model_name="BAAI/bge-reranker-v2-m3")
-            reranked_docs = reranker.rerank(new_query, [Document(page_content=info['text'], metadata=info) for info in infors], top_k=5)
-            end_time_rerank = time.time()
-            logger.info(f"Thời gian rerank: {(end_time_rerank - start_time_rerank):.2f} giây")
+            # # Sử dụng reranker để sắp xếp lại kết quả
+            # start_time_rerank = time.time()
+            # reranker = Reranker(model_name="BAAI/bge-reranker-v2-m3")
+            # reranked_docs = reranker.rerank(new_query, [Document(page_content=info['text'], metadata=info) for info in infors], top_k=5)
+            # end_time_rerank = time.time()
+            # logger.info(f"Thời gian rerank: {(end_time_rerank - start_time_rerank):.2f} giây")
 
             formatted_docs = [] # Formatted documents for prompt
             infors_text = "" # Default text if no info
@@ -91,7 +91,7 @@ async def streaming_chatbot(query: str, history: list[dict]):
         human_msg = HumanMessage(
             content=(
                 f"""**Đây là truy vấn của người dùng:** {new_query}\n\n
-                **Đây là thông tin đã truy xuất được từ cơ sở dữ liệu:**\n{infors_text}\n\n
+                **Đây là thông tin đã truy xuất được từ cơ sở dữ liệu:**\n{infors}\n\n
                 Nếu thông tin có liên quan đến truy vấn thì dựa vào thông tin trên, bạn hãy trả lời câu hỏi từ người dùng một cách đầy đủ, rõ ràng và thân thiện. Không cần thêm 'Chào bạn!' vào đầu câu trả lời.
                 Nếu không có kết quả, trả về: "Hiện tại chúng tôi chưa cập nhật dữ liệu mà bạn đang hỏi, bạn có thể hỏi câu hỏi khác để mình giúp đỡ".
                 Nếu khách hàng có chào hỏi thì cần chào hỏi lại khách hàng với vai trò là 1 người tư vấn về các thông tin của Học viện Công nghệ Bưu chính Viễn Thông PTIT.
@@ -118,7 +118,7 @@ async def streaming_chatbot(query: str, history: list[dict]):
                         elapsed_time = end_time2 - start_time2
                         logger.info(f"Thời gian nhận token đầu tiên (TTFT): {elapsed_time:.2f} giây")
                         first_token_received = True
-                    yield chunk.content
+                    yield chunk.content           
         except Exception as e:
             logger.error(f"LỖI trong quá trình streaming từ LLM: {e}")
             logger.error(traceback.format_exc())

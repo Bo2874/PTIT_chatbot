@@ -20,7 +20,7 @@ with st.sidebar:
     st.title("📝 Cuộc hội thoại")
     
     # Nút để tạo cuộc hội thoại mới
-    if st.button("➕ Tạo cuộc hội thoại mới"):
+    if st.button("➕ Tạo hội thoại mới"):
         st.session_state.chat_sessions.append([])
         # Chuyển sang cuộc hội thoại mới vừa tạo
         st.session_state.active_chat_idx = len(st.session_state.chat_sessions) - 1
@@ -42,7 +42,7 @@ with st.sidebar:
     st.markdown("---")
 
     # Nút để xóa cuộc hội thoại hiện tại
-    if st.button("🗑️ Xóa cuộc hội thoại này", type="secondary"):
+    if st.button("🗑️ Xóa hội thoại này", type="secondary"):
         # Chỉ xóa nếu còn nhiều hơn 1 cuộc hội thoại
         if len(st.session_state.chat_sessions) > 1:
             st.session_state.chat_sessions.pop(st.session_state.active_chat_idx)
@@ -55,7 +55,7 @@ with st.sidebar:
         st.rerun()
 
 # --- Giao diện Chat chính ---
-st.title(f"💬 Chatbot PTIT - Cuộc hội thoại #{st.session_state.active_chat_idx + 1}")
+st.title(f"💬 Chatbot PTIT")
 
 # Lấy ra cuộc hội thoại đang hoạt động dựa trên chỉ số
 active_chat = st.session_state.chat_sessions[st.session_state.active_chat_idx]
